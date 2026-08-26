@@ -1,36 +1,19 @@
 services:
   pgbouncer:
     image: edoburu/pgbouncer:v1.24.1-p1
-    hostname: pgbouncer
-    restart: unless-stopped
-
-    depends_on:
-      postgres:
-        condition: service_healthy
 
     env_file:
       - ../../.env
 
     ports:
-      - "${LISTEN_PORT}:6432"
+      - "${PGBOUNCER_PORT}:${PGBOUNCER_PORT}"
 
-    environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./conf/pgbouncer.ini.template:/etc/pgbouncer/pgbouncer.ini.template:ro
+      - ./conf/userlist.txt:/etc/pgbouncer/userlist.txt:ro
 
-      LISTEN_PORT: ${LISTEN_PORT}
-      POOL_MODE: transaction
-      MAX_CLIENT_CONN: 5000
-      DEFAULT_POOL_SIZE: 50
-      ADMIN_USERS: ${POSTGRES_USER}
-      AUTH_TYPE: scram-sha-256
-
-    networks:
-      - jovavia-network
-
-networks:
-  jovavia-network:
-    external: true
-    name: jovavia-network
+    command: >
+      sh -c "
+      envsubst < /etc/pgbouncer/pgbouncer.ini.template > /etc/pgbouncer/pgbouncer.ini &&
+      exec pgbouncer /etc/pgbouncer/pgbouncer.ini
+      "
