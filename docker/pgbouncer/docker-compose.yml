@@ -5,6 +5,10 @@ services:
     env_file:
       - ../../.env
 
+    depends_on:
+      postgres:
+        condition: service_healthy
+
     ports:
       - "${PGBOUNCER_PORT}:${PGBOUNCER_PORT}"
 
@@ -12,8 +16,29 @@ services:
       - ./conf/pgbouncer.ini.template:/etc/pgbouncer/pgbouncer.ini.template:ro
       - ./conf/userlist.txt:/etc/pgbouncer/userlist.txt:ro
 
-    command: >
-      sh -c "
-      envsubst < /etc/pgbouncer/pgbouncer.ini.template > /etc/pgbouncer/pgbouncer.ini &&
+    entrypoint: ["/bin/sh", "-c"]
+
+    command: |
+      eval "cat <<EOF
+      $(cat /etc/pgbouncer/pgbouncer.ini.template)
+      EOF
+      " > /tmp/pgbouncer.ini
+    
+      echo "===== Generated PgBouncer Config ====="
+      cat /tmp/pgbouncer.ini
+      echo "====================================="
       exec pgbouncer /etc/pgbouncer/pgbouncer.ini
-      "
+
+    networks:
+      - jovavia-network
+
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "${PGBOUNCER_PORT}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  jovavia-network:
+    external: true
+    name: jovavia-network
