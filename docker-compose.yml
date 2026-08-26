@@ -1,2 +1,3 @@
 include:
   - ./docker/postgres/docker-compose.yml
+  - ./docker/pgbouncer/docker-compose.yml
