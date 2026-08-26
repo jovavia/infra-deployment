@@ -1,0 +1,67 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Jovavia PgBouncer Configuration
+;; ADR-0027 : Connection Pooling Architecture
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[databases]
+* = host=${POSTGRES_HOST} port=${POSTGRES_PORT} auth_user=${POSTGRES_USER}
+
+[pgbouncer]
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Listener
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+listen_addr = 0.0.0.0
+listen_port = ${PGBOUNCER_PORT}
+unix_socket_dir = /tmp
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Authentication
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+auth_type = scram-sha-256
+auth_file = /etc/pgbouncer/userlist.txt
+auth_user = ${POSTGRES_USER}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pooling Strategy
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+pool_mode = ${PGBOUNCER_POOL_MODE}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Connections
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+max_client_conn = ${PGBOUNCER_MAX_CLIENT_CONN}
+default_pool_size = ${PGBOUNCER_DEFAULT_POOL_SIZE}
+reserve_pool_size = ${PGBOUNCER_RESERVE_POOL_SIZE}
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Timeouts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+server_idle_timeout = ${PGBOUNCER_SERVER_IDLE_TIMEOUT}
+server_lifetime = ${PGBOUNCER_SERVER_LIFETIME}
+reserve_pool_timeout = ${PGBOUNCER_RESERVE_POOL_TIMEOUT}
+query_wait_timeout = ${PGBOUNCER_QUERY_WAIT_TIMEOUT}
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Logging
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+log_connections = 1
+log_disconnections = 1
+log_pooler_errors = 1
+application_name_add_host = 1
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Administration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+admin_users = ${POSTGRES_USER}
+stats_users = ${POSTGRES_USER}
+
+ignore_startup_parameters = extra_float_digits
