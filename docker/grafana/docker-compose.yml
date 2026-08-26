@@ -1,0 +1,32 @@
+services:
+  grafana:
+    image: grafana/grafana:12.2.0
+    hostname: grafana
+    restart: unless-stopped
+
+    env_file:
+      - ../../.env
+
+    depends_on:
+      prometheus:
+        condition: service_started
+
+    environment:
+      GF_SECURITY_ADMIN_USER: "${GRAFANA_ADMIN_USER}"
+      GF_SECURITY_ADMIN_PASSWORD: "${GRAFANA_ADMIN_PASSWORD}"
+
+    ports:
+      - "${GRAFANA_PORT}:3000"
+
+    volumes:
+      - ./provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./dashboards:/var/lib/grafana/dashboards
+
+    networks:
+      - jovavia-network
+
+networks:
+  jovavia-network:
+    external: true
+    name: jovavia-network

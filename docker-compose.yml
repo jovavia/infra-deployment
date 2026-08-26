@@ -7,3 +7,4 @@ include:
   - ./docker/postgres-exporter/docker-compose.yml
   - ./docker/pgbouncer-exporter/docker-compose.yml
   - ./docker/prometheus/docker-compose.yml
+  - ./docker/grafana/docker-compose.yml
