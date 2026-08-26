@@ -1,11 +1,9 @@
 apiVersion: 1
 
 providers:
-  - name: "Jovavia Infrastructure"
-    folder: "Jovavia"
-    type: file
+  - name: Jovavia Infrastructure
     orgId: 1
-
+    type: file
     disableDeletion: false
     editable: true
 
