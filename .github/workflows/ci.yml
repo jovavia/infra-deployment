@@ -1,0 +1,80 @@
+name: Jovavia Infrastructure CI
+
+on:
+  push:
+    branches:
+      - main
+      - "feature/**"
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-compose:
+    name: Validate Docker Compose
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Validate root Docker Compose
+        run: docker compose config
+
+  validate-configs:
+    name: Validate Infrastructure Configurations
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Validate Prometheus configuration
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/docker/prometheus/conf:/etc/prometheus \
+            prom/prometheus:v3.5.0 \
+            promtool check config /etc/prometheus/prometheus.yml
+
+      - name: Validate Prometheus alert rules
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }}/docker/prometheus/conf:/etc/prometheus \
+            prom/prometheus:v3.5.0 \
+            promtool check rules /etc/prometheus/alerts.yml
+
+      - name: Validate Grafana provisioning YAML
+        uses: ibiqlik/action-yamllint@v3
+        with:
+          file_or_dir: docker/grafana/provisioning
+
+  shellcheck:
+    name: Shell Script Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@2.0.0
+        with:
+          scandir: ./scripts ./docker
+
+  markdownlint:
+    name: Markdown Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          globs: |
+            README.md
+            docs/**/*.md
