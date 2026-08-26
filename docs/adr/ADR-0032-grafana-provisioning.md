@@ -59,12 +59,14 @@ datasources:
 ```yaml
 # docker/grafana/provisioning/dashboards/dashboard.yml
 apiVersion: 1
+
 providers:
-  - name: "Jovavia Infrastructure"
-    type: file
+  - name: Jovavia Infrastructure
     orgId: 1
+    type: file
     disableDeletion: false
     editable: true
+
     options:
       path: /var/lib/grafana/dashboards
       foldersFromFilesStructure: true

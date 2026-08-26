@@ -30,6 +30,15 @@ New to this repository? Read in this order — each step assumes the ones before
 
 ## ADRs
 
+Full index with reading order: [docs/adr/index.md](adr/index.md).
+
+- [ADR-0001: Monorepo Platform Structure](adr/ADR-0001-monorepo-platform-structure.md)
+- [ADR-0002: Docker Compose Modular Architecture](adr/ADR-0002-docker-compose-modular-architecture.md)
+- [ADR-0003: Environment Configuration Strategy](adr/ADR-0003-environment-configuration-strategy.md)
+- [ADR-0004: Shared Docker Network](adr/ADR-0004-shared-docker-network.md)
+- [ADR-0010: PostgreSQL Multi-Database Strategy](adr/ADR-0010-postgresql-multi-database-strategy.md)
+- [ADR-0011: PostgreSQL Extensions Strategy](adr/ADR-0011-postgresql-extensions-strategy.md)
+- [ADR-0012: Database Bootstrap Strategy](adr/ADR-0012-database-bootstrap-strategy.md)
 - [ADR-0027: PgBouncer Connection Pooling Architecture](adr/ADR-0027-pgbouncer-architecture.md)
 - [ADR-0031: Metrics Exporters](adr/ADR-0031-metrics-exporters.md)
 - [ADR-0032: Grafana Provisioning (File-Based, Not UI/API)](adr/ADR-0032-grafana-provisioning.md)

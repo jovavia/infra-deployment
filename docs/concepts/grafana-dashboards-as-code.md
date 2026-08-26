@@ -27,9 +27,14 @@ flowchart TD
 ```yaml
 # docker/grafana/provisioning/dashboards/dashboard.yml
 apiVersion: 1
+
 providers:
-  - name: "Jovavia Infrastructure"
+  - name: Jovavia Infrastructure
+    orgId: 1
     type: file
+    disableDeletion: false
+    editable: true
+
     options:
       path: /var/lib/grafana/dashboards
       foldersFromFilesStructure: true
@@ -75,7 +80,9 @@ Every field earns its place: `uid` is the stable identifier used in URLs and API
 
 ## Operational Notes
 
-**Template variables** (`templating.list[]`) turn a static dashboard into a parameterized one — a variable's `query` is itself evaluated against the datasource (often via Prometheus's `label_values()` or `query_result()` functions), and its resolved value(s) substitute into every panel query referencing `$variablename`. A chain of dependent variables is only as reliable as its first link: a variable whose query depends on a label that doesn't exist in this deployment (a `kubernetes_namespace` or `release` label from a Helm-chart-injected exporter, for instance) resolves to nothing, which empties every downstream variable and every panel filtered by it. This is why `jovavia-postgres-overview.json`'s `instance` variable is built directly on `label_values(pg_up, instance)` rather than chaining through Kubernetes-only labels — see [Grafana Runbook](../runbooks/grafana-runbook.md) for the dashboard's history.
+**Template variables** (`templating.list[]`) turn a static dashboard into a parameterized one — a variable's `query` is itself evaluated against the datasource (often via Prometheus's `label_values()` or `query_result()` functions), and its resolved value(s) substitute into every panel query referencing `$variablename`. A chain of dependent variables is only as reliable as its first link: a variable whose query depends on a label that doesn't exist in this deployment resolves to nothing, which empties every downstream variable and every panel filtered by it. This is why `jovavia-postgres-overview.json`'s `instance` variable is built directly on `label_values(pg_up, instance)` rather than chaining through a multi-variable dependency — see the Dashboard Compatibility Note below for the specific case that pattern avoids.
+
+> **Dashboard Compatibility Note.** Grafana's community PostgreSQL dashboard (Grafana.com ID `9628`) was evaluated and not adopted: its template variables depend on `release` and `kubernetes_namespace` labels that only exist when `postgres_exporter` is deployed via its Kubernetes Helm chart — labels a Docker Compose deployment never produces. Jovavia replaced it with `jovavia-postgres-overview.json`, built directly against plain `static_configs`-based metric labels and verified compatible with `prometheuscommunity/postgres-exporter:v0.17.1` (the pinned exporter version) running under Docker Compose. See [Grafana Runbook](../runbooks/grafana-runbook.md) for the operational history.
 
 **`foldersFromFilesStructure`** changes what "the file's location" means for organizational purposes — with it `true` (Jovavia's setting), a dashboard's folder is derived from its path under the provider's `options.path`, and the provider-level static `folder` setting is ignored. This is fully documented as a decision in [ADR-0032: Grafana Provisioning (File-Based, Not UI/API)](../adr/ADR-0032-grafana-provisioning.md).
 

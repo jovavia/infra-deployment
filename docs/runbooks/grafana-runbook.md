@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Operational reference for Grafana: accessing it, verifying provisioning succeeded, and — the most likely first support ticket this component generates — diagnosing why the imported PostgreSQL dashboard shows empty panels.
+Operational reference for Grafana: accessing it, verifying provisioning succeeded, and — a support ticket this component has generated historically — diagnosing why the PostgreSQL dashboard shows empty panels (see the Dashboard Compatibility Note below for why that's now unlikely with the current dashboard).
 
 ## Architecture
 
@@ -51,9 +51,11 @@ Both dashboards are provisioned automatically on every container start — there
 
 Dashboards land in folders named **"postgres"** and **"pgbouncer"**, derived from each dashboard file's path under `docker/grafana/dashboards/` — this is `foldersFromFilesStructure: true`, fully explained in [ADR-0032: Grafana Provisioning (File-Based, Not UI/API)](../adr/ADR-0032-grafana-provisioning.md). `dashboard.yml`'s provider config no longer sets a static `folder:` value; the filesystem structure is the only thing that determines dashboard placement.
 
+> **Dashboard Compatibility Note.** Grafana's community PostgreSQL dashboard (Grafana.com ID `9628`) was evaluated for the "postgres" folder's dashboard and not adopted: its template variables depend on `release` and `kubernetes_namespace` labels that only exist when `postgres_exporter` is deployed via its Kubernetes Helm chart — labels this Docker Compose deployment never produces. Jovavia replaced it with `jovavia-postgres-overview.json`, built directly against plain `static_configs`-based metric labels and verified compatible with `prometheuscommunity/postgres-exporter:v0.17.1` (the pinned exporter version) running under Docker Compose.
+
 ## Troubleshooting
 
-**The PostgreSQL dashboard ("jovavia-postgres-overview", folder "postgres") shows "No data" on almost every panel.** This was a confirmed, reproducible issue with the previous community-imported dashboard, whose `$instance` template variable chained through `$release` and a `kubernetes_namespace` label that only exists when `postgres_exporter` runs via its Kubernetes Helm chart — see [Observability](../architecture/observability.md) Troubleshooting for the history. `jovavia-postgres-overview.json` replaced that dashboard with one built against `label_values(pg_up, instance)` directly, which resolves correctly against this stack's plain Docker Compose labels. If you see "No data" today, check `docker compose logs postgres-exporter` and confirm `pg_up` returns data in Prometheus's own UI before suspecting the dashboard.
+**The PostgreSQL dashboard ("jovavia-postgres-overview", folder "postgres") shows "No data" on almost every panel.** This was a confirmed, reproducible issue with the community dashboard evaluated and rejected for this role — see the Dashboard Compatibility Note above. `jovavia-postgres-overview.json` is built against `label_values(pg_up, instance)` directly, which resolves correctly against this stack's plain Docker Compose labels and doesn't carry that dependency. If you see "No data" today, check `docker compose logs postgres-exporter` and confirm `pg_up` returns data in Prometheus's own UI before suspecting the dashboard.
 
 **The PgBouncer dashboard's top-row stat panels look wrong or static.** Check the panel's query — the four stat panels ("Active Clients," "Waiting Clients," etc.) are hardcoded to `database="jovavia_identity"` specifically, not aggregated across all five Jovavia databases. This is a real scope limitation in the current dashboard: the timeseries panels below them (`sum by (database)(...)`) correctly cover all databases, but the headline stat panels only reflect one. Worth fixing if pool pressure on `jovavia_pulse`/`jovavia_guardian`/`jovavia_vault`/`jovavia_event_mesh` specifically needs to be visible at a glance.
 

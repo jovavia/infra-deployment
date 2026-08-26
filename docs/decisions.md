@@ -8,8 +8,17 @@ Six months from now, someone will ask "why is it built this way?" about somethin
 
 ## Full ADRs
 
+See [docs/adr/index.md](adr/index.md) for reading order and a note on why the ID sequence has gaps.
+
 | ID | Title | Status | Summary |
 |---|---|---|---|
+| [ADR-0001](adr/ADR-0001-monorepo-platform-structure.md) | Monorepo Platform Structure | Accepted | All Sprint 0 infrastructure components live in one `infra-deployment` repository, not one repository per component. |
+| [ADR-0002](adr/ADR-0002-docker-compose-modular-architecture.md) | Docker Compose Modular Architecture | Accepted | One `docker-compose.yml` per component under `docker/<component>/`, merged via the root file's `include:` list. |
+| [ADR-0003](adr/ADR-0003-environment-configuration-strategy.md) | Environment Configuration Strategy | Accepted | One git-ignored `.env`, templated by `.env.example`, read by every component via `env_file`. |
+| [ADR-0004](adr/ADR-0004-shared-docker-network.md) | Shared Docker Network | Accepted | One named `jovavia-network`, owned by PostgreSQL's compose file and attached to `external: true` by every other component. |
+| [ADR-0010](adr/ADR-0010-postgresql-multi-database-strategy.md) | PostgreSQL Multi-Database Strategy | Accepted | Five logical Jovavia databases inside one PostgreSQL 17 instance, not five separate instances. |
+| [ADR-0011](adr/ADR-0011-postgresql-extensions-strategy.md) | PostgreSQL Extensions Strategy | Accepted | Only `pg_stat_statements` is preloaded; flags the real gap that it isn't yet activated (`CREATE EXTENSION`) in any database. |
+| [ADR-0012](adr/ADR-0012-database-bootstrap-strategy.md) | Database Bootstrap Strategy | Accepted | `scripts/bootstrap-postgres.sh`'s idempotent, manually-run `\gexec` pattern creates the five databases. |
 | [ADR-0027](adr/ADR-0027-pgbouncer-architecture.md) | PgBouncer Connection Pooling Architecture | Accepted | Every service connects through PgBouncer in transaction-pooling mode, never directly to PostgreSQL. |
 | [ADR-0031](adr/ADR-0031-metrics-exporters.md) | Metrics Exporters | Accepted | `postgres_exporter` and `pgbouncer_exporter` as dedicated sidecar containers translate SQL-shaped state into Prometheus's scrape format. |
 | [ADR-0032](adr/ADR-0032-grafana-provisioning.md) | Grafana Provisioning | Accepted | File-based provisioning (datasources + dashboards) reconciled on every container start; documents the `foldersFromFilesStructure` behavior. |
