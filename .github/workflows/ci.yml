@@ -21,8 +21,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Create CI environment
+        run: cp .env.example .env
+
       - name: Validate root Docker Compose
-        run: docker compose config
+        run: docker compose --env-file .env config
 
   validate-configs:
     name: Validate Infrastructure Configurations
@@ -31,6 +34,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
+
+      - name: Create CI environment
+        run: cp .env.example .env
 
       - name: Validate Prometheus configuration
         run: |
