@@ -1,0 +1,27 @@
+# Environment
+.env
+
+# Docker volumes
+volumes/
+data/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+*.iml
+
+# Logs
+*.log
+logs/
+
+# Grafana generated files
+docker/grafana/data/
+
+# Prometheus TSDB
+docker/prometheus/data/
+
+# Tempo/Loki
+docker/tempo/data/
+docker/loki/data/
