@@ -21,7 +21,7 @@ unix_socket_dir = /tmp
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 auth_type = scram-sha-256
-auth_file = /etc/pgbouncer/userlist.txt
+auth_file = /tmp/userlist.txt
 auth_user = ${POSTGRES_USER}
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

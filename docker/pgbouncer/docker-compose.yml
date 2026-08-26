@@ -16,7 +16,7 @@ services:
 
     volumes:
       - ./conf/pgbouncer.ini.template:/etc/pgbouncer/pgbouncer.ini.template:ro
-      - ./conf/userlist.txt:/etc/pgbouncer/userlist.txt:ro
+      - ./conf/userlist.template:/etc/pgbouncer/userlist.template:ro
       - ./start-pgbouncer.sh:/start-pgbouncer.sh:ro
 
     entrypoint: ["/bin/sh", "/start-pgbouncer.sh"]
