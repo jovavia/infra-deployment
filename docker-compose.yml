@@ -1,3 +1,8 @@
 include:
+  # Database Layer
   - ./docker/postgres/docker-compose.yml
   - ./docker/pgbouncer/docker-compose.yml
+
+  # Observability
+  - ./docker/postgres-exporter/docker-compose.yml
+  - ./docker/pgbouncer-exporter/docker-compose.yml

@@ -1,0 +1,32 @@
+services:
+  pgbouncer-exporter:
+    image: prometheuscommunity/pgbouncer-exporter:v0.11.0
+    hostname: pgbouncer-exporter
+    restart: unless-stopped
+
+    env_file:
+      - ../../.env
+
+    depends_on:
+      pgbouncer:
+        condition: service_started
+
+    environment:
+      PGBOUNCER_EXPORTER_CONNECTION_STRING: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${PGBOUNCER_HOST}:${PGBOUNCER_PORT}/pgbouncer?sslmode=disable"
+
+    ports:
+      - "${PGBOUNCER_EXPORTER_PORT}:9127"
+
+    networks:
+      - jovavia-network
+
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:9127/metrics"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+networks:
+  jovavia-network:
+    external: true
+    name: jovavia-network
