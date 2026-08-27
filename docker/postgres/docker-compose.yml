@@ -39,7 +39,3 @@ services:
 volumes:
   postgres-data:
     name: jovavia-postgres-data
-
-networks:
-  jovavia-network:
-    external: true

@@ -17,6 +17,3 @@ services:
     networks:
       - jovavia-network
 
-networks:
-  jovavia-network:
-    external: true
