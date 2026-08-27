@@ -42,4 +42,4 @@ volumes:
 
 networks:
   jovavia-network:
-    name: jovavia-network
+    external: true

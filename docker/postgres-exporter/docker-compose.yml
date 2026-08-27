@@ -20,4 +20,3 @@ services:
 networks:
   jovavia-network:
     external: true
-    name: jovavia-network

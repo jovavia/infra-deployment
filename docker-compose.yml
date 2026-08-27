@@ -8,3 +8,8 @@ include:
   - ./docker/pgbouncer-exporter/docker-compose.yml
   - ./docker/prometheus/docker-compose.yml
   - ./docker/grafana/docker-compose.yml
+
+networks:
+  jovavia-network:
+    name: jovavia-network
+    driver: bridge
