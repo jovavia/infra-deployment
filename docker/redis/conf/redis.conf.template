@@ -1,0 +1,19 @@
+bind 0.0.0.0
+port ${REDIS_PORT}
+protected-mode no
+
+requirepass ${REDIS_PASSWORD}
+masterauth ${REDIS_PASSWORD}
+
+appendonly yes
+appendfsync everysec
+dir /data
+
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+cluster-announce-port ${REDIS_PORT}
+cluster-announce-bus-port ${REDIS_BUS_PORT}
+cluster-require-full-coverage no
+
+loglevel notice

@@ -3,6 +3,9 @@ include:
   - ./docker/postgres/docker-compose.yml
   - ./docker/pgbouncer/docker-compose.yml
 
+  # Cache Layer
+  - ./docker/redis/docker-compose.yml
+
   # Observability
   - ./docker/postgres-exporter/docker-compose.yml
   - ./docker/pgbouncer-exporter/docker-compose.yml
@@ -11,5 +14,4 @@ include:
 
 networks:
   jovavia-network:
-    name: jovavia-network
     driver: bridge

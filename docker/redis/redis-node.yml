@@ -1,0 +1,27 @@
+services:
+  redis-node-base:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_BASE_PORT: ${REDIS_BASE_PORT}
+
+    volumes:
+      - ./conf:/config:ro
+      - ./scripts:/scripts:ro
+
+    entrypoint:
+      - /scripts/start-redis.sh
+
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - redis-cli -p $((REDIS_BASE_PORT + REDIS_NODE_ID)) -a "$REDIS_PASSWORD" PING
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    networks:
+      - jovavia-network

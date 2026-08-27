@@ -1,0 +1,96 @@
+services:
+  redis-node-1:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-1
+    hostname: redis-node-1
+    environment:
+      REDIS_PORT: 7001
+      REDIS_BUS_PORT: 17001
+      REDIS_NODE_ID: "1"
+    ports:
+      - "${REDIS_BASE_PORT:-7001}:7001"
+      - "17001:17001"
+    volumes:
+      - ./data/node-1:/data
+
+  redis-node-2:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-2
+    hostname: redis-node-2
+    environment:
+      REDIS_PORT: 7002
+      REDIS_BUS_PORT: 17002
+      REDIS_NODE_ID: "2"
+    ports:
+      - "7002:7002"
+      - "17002:17002"
+    volumes:
+      - ./data/node-2:/data
+
+  redis-node-3:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-3
+    hostname: redis-node-3
+    environment:
+      REDIS_PORT: 7003
+      REDIS_BUS_PORT: 17003
+      REDIS_NODE_ID: "3"
+    ports:
+      - "7003:7003"
+      - "17003:17003"
+    volumes:
+      - ./data/node-3:/data
+
+  redis-node-4:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-4
+    hostname: redis-node-4
+    environment:
+      REDIS_PORT: 7004
+      REDIS_BUS_PORT: 17004
+      REDIS_NODE_ID: "4"
+    ports:
+      - "7004:7004"
+      - "17004:17004"
+    volumes:
+      - ./data/node-4:/data
+
+  redis-node-5:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-5
+    hostname: redis-node-5
+    environment:
+      REDIS_PORT: 7005
+      REDIS_BUS_PORT: 17005
+      REDIS_NODE_ID: "5"
+    ports:
+      - "7005:7005"
+      - "17005:17005"
+    volumes:
+      - ./data/node-5:/data
+
+  redis-node-6:
+    extends:
+      file: redis-node.yml
+      service: redis-node-base
+    container_name: redis-node-6
+    hostname: redis-node-6
+    environment:
+      REDIS_PORT: 7006
+      REDIS_BUS_PORT: 17006
+      REDIS_NODE_ID: "6"
+    ports:
+      - "7006:7006"
+      - "17006:17006"
+    volumes:
+      - ./data/node-6:/data
