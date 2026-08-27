@@ -19,7 +19,7 @@ flowchart LR
 
 Folders are derived from where each dashboard file lives on disk (`foldersFromFilesStructure: true` — see [ADR-0032](../adr/ADR-0032-grafana-provisioning.md)), so the folder tree grows as new component dashboards are added:
 
-```
+```text
 Dashboards/
 ├── postgres/    (jovavia-postgres-overview.json — shipped)
 ├── pgbouncer/   (pgbouncer-overview.json — shipped)

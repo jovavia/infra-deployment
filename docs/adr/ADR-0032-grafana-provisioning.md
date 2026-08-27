@@ -82,7 +82,7 @@ volumes:
 
 **Folder placement, stated precisely:** `dashboard.yml` sets `options.foldersFromFilesStructure: true` and no static `folder:` field. With `foldersFromFilesStructure` enabled, Grafana derives each dashboard's folder from its path *relative to* `options.path` — there is deliberately no provider-level `folder` value to conflict with that. `docker/grafana/dashboards/postgres/jovavia-postgres-overview.json` and `docker/grafana/dashboards/pgbouncer/pgbouncer-overview.json` are mounted at `/var/lib/grafana/dashboards/postgres/...` and `/var/lib/grafana/dashboards/pgbouncer/...` respectively, so Grafana creates folders named **"postgres"** and **"pgbouncer"**. The resulting (and intended) folder tree, filled in as components ship:
 
-```
+```yaml
 Dashboards/
 ├── postgres/    (shipped)
 ├── pgbouncer/   (shipped)

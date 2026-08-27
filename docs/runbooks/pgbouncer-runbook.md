@@ -57,7 +57,7 @@ auth_type = scram-sha-256
 auth_file = /tmp/userlist.txt
 ```
 
-```
+```ini
 ;; docker/pgbouncer/conf/userlist.template (committed to git — no real credential in this file)
 "${POSTGRES_USER}" "${POSTGRES_PASSWORD}"
 ```
